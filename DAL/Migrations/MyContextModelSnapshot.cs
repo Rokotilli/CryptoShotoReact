@@ -25,10 +25,12 @@ namespace DAL.Migrations
 
             modelBuilder.Entity("DAL.Models.Coin", b =>
                 {
-                    b.Property<string>("Id")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("nvarchar(450)")
+                        .HasColumnType("int")
                         .HasAnnotation("DatabaseGenerated", DatabaseGeneratedOption.Identity);
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -166,8 +168,8 @@ namespace DAL.Migrations
                     b.Property<string>("UserId")
                         .HasColumnType("nvarchar(450)");
 
-                    b.Property<string>("CoinId")
-                        .HasColumnType("nvarchar(450)");
+                    b.Property<int>("CoinId")
+                        .HasColumnType("int");
 
                     b.Property<float>("Count")
                         .HasColumnType("real");

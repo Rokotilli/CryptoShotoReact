@@ -8,7 +8,7 @@ namespace DAL.Models
 {
     public class Wallet
     {
-        public string CoinId { get; set; }
+        public int CoinId { get; set; }
 
         public string UserId { get; set; }
 

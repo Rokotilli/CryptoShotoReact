@@ -54,7 +54,8 @@ namespace DAL.Migrations
                 name: "Coins",
                 columns: table => new
                 {
-                    Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Price = table.Column<float>(type: "real", nullable: false)
                 },
@@ -64,7 +65,7 @@ namespace DAL.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "news",
+                name: "News",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
@@ -74,7 +75,7 @@ namespace DAL.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_news", x => x.Id);
+                    table.PrimaryKey("PK_News", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -208,7 +209,7 @@ namespace DAL.Migrations
                 name: "Wallets",
                 columns: table => new
                 {
-                    CoinId = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    CoinId = table.Column<int>(type: "int", nullable: false),
                     UserId = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     Count = table.Column<float>(type: "real", nullable: false)
                 },
@@ -298,7 +299,7 @@ namespace DAL.Migrations
                 name: "AspNetUserTokens");
 
             migrationBuilder.DropTable(
-                name: "news");
+                name: "News");
 
             migrationBuilder.DropTable(
                 name: "RefreshToken");

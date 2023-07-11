@@ -19,20 +19,19 @@ builder.Services.AddDbContext<MyContext>(options =>
 });
 
 builder.Services.AddIdentity<User, IdentityRole>().AddEntityFrameworkStores<MyContext>();
-builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-                   .AddJwtBearer(options =>
-                   {
-                       options.TokenValidationParameters = new TokenValidationParameters
-                       {
-                           ValidateIssuer = true,
-                           ValidateAudience = true,
-                           ValidateLifetime = true,
-                           ValidateIssuerSigningKey = true,
-                           ValidIssuer = config["JwtIssuer"],
-                           ValidAudience = config["JwtAudience"],
-                           IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(config["JwtSecurityKey"]))
-                       };
-                   });
+builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(options =>
+{
+    options.TokenValidationParameters = new TokenValidationParameters
+    {
+        ValidateIssuer = true,
+        ValidateAudience = true,
+        ValidateLifetime = true,
+        ValidateIssuerSigningKey = true,
+        ValidIssuer = config["JwtIssuer"],
+        ValidAudience = config["JwtAudience"],
+        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(config["JwtSecurityKey"]))
+    };
+});
 
 
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();

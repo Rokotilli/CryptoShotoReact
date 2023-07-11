@@ -13,7 +13,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DAL.Migrations
 {
     [DbContext(typeof(MyContext))]
-    [Migration("20230710171515_initial")]
+    [Migration("20230711200204_initial")]
     partial class initial
     {
         /// <inheritdoc />
@@ -28,10 +28,12 @@ namespace DAL.Migrations
 
             modelBuilder.Entity("DAL.Models.Coin", b =>
                 {
-                    b.Property<string>("Id")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("nvarchar(450)")
+                        .HasColumnType("int")
                         .HasAnnotation("DatabaseGenerated", DatabaseGeneratedOption.Identity);
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -49,7 +51,8 @@ namespace DAL.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasAnnotation("DatabaseGenerated", DatabaseGeneratedOption.Identity);
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
@@ -63,7 +66,7 @@ namespace DAL.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("news");
+                    b.ToTable("News", (string)null);
                 });
 
             modelBuilder.Entity("DAL.Models.RefreshToken", b =>
@@ -168,8 +171,8 @@ namespace DAL.Migrations
                     b.Property<string>("UserId")
                         .HasColumnType("nvarchar(450)");
 
-                    b.Property<string>("CoinId")
-                        .HasColumnType("nvarchar(450)");
+                    b.Property<int>("CoinId")
+                        .HasColumnType("int");
 
                     b.Property<float>("Count")
                         .HasColumnType("real");
