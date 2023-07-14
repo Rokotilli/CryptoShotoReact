@@ -1,6 +1,5 @@
 ﻿using DAL.Models;
 using DAL.Repositories.Contracts;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace webapi.Controllers

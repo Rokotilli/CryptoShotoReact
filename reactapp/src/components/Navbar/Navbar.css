@@ -1,0 +1,19 @@
+.NavBarMain {
+    background: black;
+    padding: 15px 5px;
+}
+
+.NavBarMenu {
+    max-width: 500px;
+    display: flex;
+    justify-content: center;
+    margin: 0 auto;
+    justify-content: space-between;    
+}
+
+.NavBarButton {
+    color: rgb(255, 32, 162);
+    padding: 10px;
+    text-decoration: none;
+    outline: 2px solid #ffffff;
+}

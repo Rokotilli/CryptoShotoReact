@@ -1,7 +1,5 @@
-﻿using DAL.Models;
-using DAL.Repositories.Contracts;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Identity;
+﻿using BLL.Interfaces;
+using DAL.Models;
 using Microsoft.AspNetCore.Mvc;
 
 namespace webapi.Controllers
@@ -10,133 +8,43 @@ namespace webapi.Controllers
     [ApiController]
     public class WalletController : ControllerBase
     {
-        private IUnitOfWork _unitofwork { get; set; }
-        private UserManager<User> _userManager { get; set; }
-        public WalletController(IUnitOfWork unitofwork, UserManager<User> userManager)
+        private readonly IWalletLogic _walletLogic;
+        public WalletController(IWalletLogic walletLogic)
         {
-            _unitofwork = unitofwork;
-            _userManager = userManager;
+            _walletLogic = walletLogic;
         }
 
         [HttpPost("BuyCoin")]
         public async Task<ActionResult> BuyCoin([FromBody] List<string> ids)
         {
-            try
-            {
-                float count = float.Parse(ids[2]);
+            var model = await _walletLogic.BuyCoin(ids);
 
-                var user = await _userManager.FindByEmailAsync(ids[1]);
-
-                Wallet temp = new Wallet();
-
-                temp.UserId = user.Id;
-                temp.CoinId = int.Parse(ids[0]);
-                temp.Count = count;
-
-                try
-                {
-                    var tem = await _unitofwork.WalletRepository.GetAllByIdAsync(user.Id);
-
-                    foreach (var smth in tem)
-                    {
-                        if (smth.CoinId == temp.CoinId)
-                        {
-                            smth.Count += temp.Count;
-
-                            await _unitofwork.WalletRepository.UpdateAsync(smth);
-                            await _unitofwork.SaveChangesAsync();
-                            return Ok();
-                        }
-                    }
-
-                    await _unitofwork.WalletRepository.AddAsync(temp);
-                    await _unitofwork.SaveChangesAsync();
-                    return Ok();
-                }
-
-                catch
-                {
-                    return Ok();
-                }
-            }
-            catch
-            {
+            if (model == false)
                 return BadRequest();
-            }
+
+            return Ok();
         }
 
-        [HttpGet("GetAllWallets/{email}")]
-        public async Task<List<Wallet>> GetAllWallets()
+        [HttpGet("GetAllWallets")]
+        public async Task<ActionResult<List<Wallet>>> GetAllWallets([FromQuery] string email)
         {
-            var user = await _userManager.FindByEmailAsync(HttpContext.GetRouteValue("email").ToString());
+            var model = await _walletLogic.GetAllWallets(email);
 
-            var result = await _unitofwork.WalletRepository.GetAllByIdAsync(user.Id);
+            if (model == null)
+                return NotFound();
 
-            foreach (var wallet in result)
-            {
-                wallet.User = null;
-            }
-            if (result != null)
-            {
-                return result;
-            }
-            else
-            {
-                return null;
-            }
+            return Ok(model);
         }
-
 
         [HttpPost("SellCoin")]
         public async Task<ActionResult> SellCoin([FromBody] List<string> ids)
         {
-            try
-            {
-                float count = float.Parse(ids[2]);
+            var model = await _walletLogic.SellCoin(ids);
 
-                var user = await _userManager.FindByEmailAsync(ids[1]);
-
-                Wallet temp = new Wallet();
-
-                temp.UserId = user.Id;
-                temp.CoinId = int.Parse(ids[0]);
-                temp.Count = count;
-
-                try
-                {
-                    var tem = await _unitofwork.WalletRepository.GetAllByIdAsync(user.Id);
-
-                    foreach (var smth in tem)
-                    {
-                        if (smth.CoinId == temp.CoinId)
-                        {
-                            if (count <= smth.Count)
-                            {
-                                smth.Count -= temp.Count;
-
-                                await _unitofwork.WalletRepository.UpdateAsync(smth);
-                                await _unitofwork.SaveChangesAsync();
-                                return Ok();
-                            }
-                            else
-                            {
-                                return BadRequest();
-                            }
-                        }
-                    }
-
-                    return Ok();
-                }
-
-                catch
-                {
-                    return BadRequest();
-                }
-            }
-            catch
-            {
+            if (model == false)
                 return BadRequest();
-            }
+
+            return Ok();
         }
     }
 }

@@ -1,52 +1,36 @@
 import React, { Component } from 'react';
-import axios from '../node_modules/axios/index';
+import { Route, Routes } from 'react-router-dom';
+import Coins from './components/Coins/Coins';
+import { Login } from './components/Login/Login';
+import { Navbar } from './components/Navbar/Navbar';
+import News from './components/News/News';
+import Profile from './components/Profile/Profile';
+import Settings from './components/Profile/Settings/Settings';
+import Registration from './components/Registration/Registration';
+//import AuthContext from './contexts/AuthContext';
 
 export default class App extends Component {
     static displayName = App.name;
 
-    constructor(props) {
-        super(props);
-        this.state = { coins: [], loading: true };
-    }
-
-    componentDidMount() {
-        this.populateWeatherData();
-    }
-
-    renderForecastsTable(coins) {
-        return (
-            <table className='table table-striped' aria-labelledby="tabelLabel">
-                {coins.map(coin =>
-                    <tr key={coin.id}>
-                        <td>{coin.name}</td>
-                        <td>{coin.price}</td>
-                    </tr>
-                )}
-            </table>
-        );
-    }
-
     render() {
-        let contents = this.state.loading ? <p><em>Loading...</em></p> : App.renderForecastsTable(this.state.coins);
-
         return (
             <div>
-                <h1 id="tabelLabel" >Coins</h1>
-                {contents}
+                <Navbar />
+                <Routes>
+                    <Route path="/" element={<News />} />
+                    <Route path="/coins" element={<Coins />} />
+                    <Route path="/login" element={<Login />} />
+                    <Route path="/signup" element={<Registration />} />
+                    <Route path="/profile" element={<Profile />} />
+                    <Route path="/profile/settings" element={<Settings />} />
+                </Routes>
+                <hr />
+                <footer>
+                    <p>&copy; 2023 - CryptoShoto.</p>
+                    <br />
+                </footer>
             </div>
         );
     }
-
-    async populateWeatherData() {
-        try {
-            const response = await axios.get('coin/GetAllCoins');
-            this.setState({ coins: response.data, loading: false });
-        }
-        catch (err) {
-            console.log(err);
-        }
-    }
-}
-
-       
+}       
        

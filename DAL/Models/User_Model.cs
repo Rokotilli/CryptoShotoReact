@@ -10,15 +10,10 @@ namespace DAL.Models
 {
     public class User_Model 
     {
-        [Required(ErrorMessage ="Email is nyshen")]
-        [EmailAddress]
         public string Email { get; set; }
 
-        [PasswordPropertyText]
-        [Required(ErrorMessage = "Password is nyshen")]
         public string Password { get; set; }
 
-        [Required(ErrorMessage = "Name is nyshen")]
         public string Name { get; set; }
     }
 }

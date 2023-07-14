@@ -1,3 +1,5 @@
+using BLL.Interfaces;
+using BLL.Managers;
 using DAL;
 using DAL.Models;
 using DAL.Repositories;
@@ -33,11 +35,12 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJw
     };
 });
 
-
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 builder.Services.AddScoped<IWalletRepository, WalletRepository>();
 builder.Services.AddScoped<ICoinRepository, CoinRepository>();
 builder.Services.AddScoped<INewsRepository, NewsRepository>();
+builder.Services.AddScoped<IUserLogic, UserLogic>();
+builder.Services.AddScoped<IWalletLogic, WalletLogic>();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 

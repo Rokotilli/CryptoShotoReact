@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using DAL.Models;
+using DAL.Repositories.Contracts;
 using Microsoft.AspNetCore.Mvc;
 
 namespace webapi.Controllers
@@ -7,5 +8,21 @@ namespace webapi.Controllers
     [ApiController]
     public class NewsController : ControllerBase
     {
+        private INewsRepository newsRepository;
+        public NewsController(INewsRepository newsRepository)
+        {
+            this.newsRepository = newsRepository;
+        }
+
+        [HttpGet("GetAllNews")]
+        public async Task<ActionResult<List<News>>> GetAllNews()
+        {
+            var result = await newsRepository.GetAllAsync();
+
+            if (result != null)
+                return Ok(result.ToList());
+
+            return BadRequest();
+        }
     }
 }

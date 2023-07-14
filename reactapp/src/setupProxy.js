@@ -2,6 +2,15 @@ const { createProxyMiddleware } = require('http-proxy-middleware');
 
 const context = [
     "/coin/GetAllCoins",
+    "/news/GetAllNews",
+    "/user/signup",
+    "/user/LogIn",
+    "/user/GetUserByAccessToken",
+    "/user/ChangeName",
+    "/validatetoken/CheckToken",
+    "/validatetoken/CheckAndGiveAccessToken",
+    "/user/DeleteRefreshToken",
+    "/user/ChangePassword"
 ];
 
 module.exports = function (app) {
