@@ -10,7 +10,11 @@ const context = [
     "/validatetoken/CheckToken",
     "/validatetoken/CheckAndGiveAccessToken",
     "/user/DeleteRefreshToken",
-    "/user/ChangePassword"
+    "/user/ChangePassword",
+    "/wallet/GetAllWallets",
+    "/wallet/BuyCoin",
+    "/wallet/SellCoin",
+    "/user/ChangeAvatar"
 ];
 
 module.exports = function (app) {

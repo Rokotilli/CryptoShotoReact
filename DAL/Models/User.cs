@@ -14,6 +14,7 @@ namespace DAL.Models
             RefreshTokens = new HashSet<RefreshToken>();
         }
 
+        public byte[] Avatar { get; set; }
         public virtual ICollection<RefreshToken> RefreshTokens { get; set; }
         public virtual ICollection<Wallet> Wallets { get; set; }
     }

@@ -15,11 +15,14 @@
     <Folder Include="src\components\Navbar\" />
     <Folder Include="src\components\News\" />
     <Folder Include="src\components\Login\" />
-    <Folder Include="src\components\Coins\" />
     <Folder Include="src\components\Profile\Settings\" />
+    <Folder Include="src\components\Wallet\" />
     <Folder Include="src\Functions\" />
   </ItemGroup>
   <ItemGroup>
     <None Remove="src\components\Registration\NewFile.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Remove="src\components\css\NewFile.txt" />
   </ItemGroup>
 </Project>

@@ -1,36 +1,72 @@
 import React, { Component } from 'react';
 import axios from '../../../node_modules/axios/index';
 import { AddToStorage } from '../../Functions/Functions';
+import { checkLogged } from '../../Functions/Functions';
+import { Navigate } from 'react-router';
+import { ToastContainer, toast } from 'react-toastify';
+import { ThreeDots } from 'react-loader-spinner';
 
 export class Login extends Component {
     constructor(props) {
         super(props);
-        this.state = { name: '', email: '', password: '', errorMessage: '' };
+        this.state = { name: '', email: '', password: '', loading: true, isLoggedIn: false};
     }
 
-    render() {
-        const { email, password, errorMessage } = this.state;
+    async componentDidMount() {
+        const isLoggedIn = this.state.isLoggedIn;
 
-        return (
+        try {
+            const isLoggedIn2 = await checkLogged();
+           
+            if (!isLoggedIn2) {
+                this.setState({ isLoggedIn });                
+                this.setState({ loading: false });
+                return;
+            }
+            this.setState({ isLoggedIn:true });
+            this.setState({ loading: false });
+        }
+        catch (err) {
+            console.log(err);
+        }
+    }
+        
+    renderLogin() {
+        const { email, password, isLoggedIn } = this.state;
+                
+        if (isLoggedIn) {
+            return <Navigate to="/" />;
+        }
+
+        return (            
             <div>
+                <ToastContainer position="top-right" autoClose={5000} hideProgressBar newestOnTop closeOnClick rtl={false} pauseOnFocusLoss draggable pauseOnHover />
                 <h2>Login</h2>
-
-                {<p>{errorMessage}</p>}
 
                 <form onSubmit={this.confirmLogin}>
                     <label>
                         Email:
                         <input type="email" name="email" value={email} onChange={this.handleChange} required />
                     </label>
-                    <br />
+                    <br /><br />
                     <label>
                         Password:
-                        <input type="password" name="password" value={password} onChange={this.handleChange} required />
+                        <input type="password" name="password" value={password} onChange={this.handleChange} required /> <br />
                     </label>
                     <br />
 
-                    <button type="submit">Login</button>
+                    <button type="submit" className="AllButton">Login</button>
                 </form>
+            </div>
+        );
+    }
+
+    render() {
+        let content = this.state.loading ? <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }} ><ThreeDots color="#00BFFF" height={80} width={80} /></div> : this.renderLogin();
+        
+        return (
+            <div>
+                { content }
             </div>
         );
     }
@@ -50,8 +86,15 @@ export class Login extends Component {
             window.location.href = '/';
         }
         catch (err) {
-            console.log(err);
-            this.setState({ errorMessage: 'Smth went wrong' });
+            toast.error(err.response.data, {
+                position: "top-right",
+                autoClose: 5000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+            });
         }
     }
 }

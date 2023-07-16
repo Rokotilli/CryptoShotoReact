@@ -20,7 +20,14 @@ builder.Services.AddDbContext<MyContext>(options =>
     options.UseSqlServer(connectionString);
 });
 
-builder.Services.AddIdentity<User, IdentityRole>().AddEntityFrameworkStores<MyContext>();
+builder.Services.AddIdentity<User, IdentityRole>(options =>
+{
+    options.Password.RequiredUniqueChars = 0;
+    options.User.RequireUniqueEmail = true;
+    options.Password.RequireNonAlphanumeric = false;
+    options.Password.RequiredLength = 8;
+
+}).AddEntityFrameworkStores<MyContext>();
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(options =>
 {
     options.TokenValidationParameters = new TokenValidationParameters

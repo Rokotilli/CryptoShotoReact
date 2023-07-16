@@ -1,124 +1,130 @@
-import React, { Component } from 'react';
-import axios from '../../../../node_modules/axios/index';
+import React, { useState, useEffect, useContext } from 'react';
+import axios from 'axios';
 import { checkLogged } from '../../../Functions/Functions';
-import { Navigate } from 'react-router';
 import { NavLink } from 'react-router-dom';
+import { NavbarContext } from '../../../Contexts/NavbarContext';
+import { ToastContainer, toast } from 'react-toastify';
+import { useForm } from 'react-hook-form';
+import "../../css/forall.css";
+import { ThreeDots } from 'react-loader-spinner';
 
-export default class Settings extends Component {
-    constructor(props) {
-        super(props);
-        this.state = { name: "", oldPassword: "", newPassword: "", confirmPassword: "", errrorMessage: "", succeed: "", loading: true, isLoggedIn: false };
-    }
+const Settings = () => {
+    const [loading, setLoading] = useState(true);
+    const { user } = useContext(NavbarContext);
+    const { handleSubmit: handleSubmitName, register: username, formState: { errors: errorsName } } = useForm();
+    const { handleSubmit: handleSubmitPassword, register: password, formState: { errors: errorsPassword }, watch } = useForm();
 
-    async componentDidMount() {
-        try {
-            this.setState({ loading: true });
-            const isLoggedIn = await checkLogged();
-            if (isLoggedIn) {
-                this.populateProfile();
-                this.setState({ isLoggedIn });
-                return;
-            }
-            this.setState({ loading: false });
-        } catch (err) {
-            console.log(err);
-        }
-    }
-
-    handleChangeName = async (e) => {
-        e.preventDefault();
-        const name = this.state.name;
-
-        axios.defaults.headers.common["xAuthAccessToken"] = localStorage.getItem("accessToken");
-       
-        const response = await axios.post(`/user/ChangeName?name=${name}`);
-        delete axios.defaults.headers.common["xAuthAccessToken"];
-
-        window.location.href = '/profile/settings';
-    }
-
-    handleChangePassword = async (e) => {
-        e.preventDefault();
-        const { oldPassword, newPassword, confirmPassword } = this.state;
-
-        if (newPassword === confirmPassword) {
+    useEffect(() => {
+        const check = async () => {
             try {
-                axios.defaults.headers.common["xAuthAccessToken"] = localStorage.getItem("accessToken");
-                const response = await axios.post("/user/ChangePassword", { oldPassword, newPassword });
-                delete axios.defaults.headers.common["xAuthAccessToken"];
+                if (await checkLogged()) {
+                    setLoading(false);
+                    return;
+                }
+                window.location.href = '/login';
             }
             catch (err) {
-                this.setState({ errorMessage: 'Wrong old password' });
-                return;
+                console.log(err);
             }
+        }
 
-            this.setState({ succeed: 'Password has been changed' });
+        check();
+    }, []);
+
+    const handleChangeName = async (data) => {
+
+        axios.defaults.headers.common['xAuthAccessToken'] = localStorage.getItem('accessToken');
+        await axios.post(`/user/ChangeName?name=${data.name}`);
+        delete axios.defaults.headers.common['xAuthAccessToken'];
+
+        window.location.href = '/profile/settings';
+    };
+
+    const handleChangePassword = async (data) => {
+        const { newPassword, oldPassword } = data;
+
+        try {
+            axios.defaults.headers.common['xAuthAccessToken'] = localStorage.getItem('accessToken');
+            await axios.post('/user/ChangePassword', { oldPassword, newPassword });
+            delete axios.defaults.headers.common['xAuthAccessToken'];
+        }
+        catch (err) {
+            toast.error('Wrong old password.', {
+                position: "top-right",
+                autoClose: 5000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+            });
             return;
         }
 
-        this.setState({ errorMessage: 'Passwords are not equal' });
-    }
-
-    handleChange = (e) => {
-        this.setState({ [e.target.name]: e.target.value });
+        toast.success('Password has been changed!', {
+            position: "top-right",
+            autoClose: 5000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+        });
+        return;
     };
 
-    renderProfile(user) {
-        const { oldPassword, newPassword, confirmPassword, name, isLoggedIn, errorMessage, succeed } = this.state;
+    const passwordd = watch('newPassword');
 
-        if (!isLoggedIn) {
-            return <Navigate to="/login" />;
-        }
 
+    const renderProfile = (user) => {
         return (
             <>
+                <ToastContainer position="top-right" autoClose={5000} hideProgressBar newestOnTop closeOnClick rtl={false} pauseOnFocusLoss draggable pauseOnHover />
                 <h3>Hello {user.userName}</h3>
 
-                <form onSubmit={ this.handleChangeName }>
-                    <label>
-                        Change name:
-                        <input type="text" name="name" value={name} onChange={this.handleChange} required />
-                    </label>
-                    <button type="submit">Change</button>
+                <form onSubmit={handleSubmitName(handleChangeName)}>
+                    <div className="InputForm">
+                        <label htmlFor="name">Change username:</label><br />
+                        <input type="text" id="name" {...username('name', { required: 'Enter your username', minLength: { value: 3, message: 'Username must be at least 3 characters long' }, maxLength: { value: 10, message: 'Username must not exceed 15 characters' } })} />
+                        {errorsName.name && <span className="ErrorValidation">{errorsName.name.message}</span>}
+                    </div>
+                    <button className="AllButton" type="submit">Change</button>
                 </form>
+                <br />
+                <form onSubmit={handleSubmitPassword(handleChangePassword)}>
+                    <div className="InputForm">
+                        <label htmlFor="password">Change password:</label><br/>
+                        <input type="password" id="oldPassword" placeholder="Old password..." {...password('oldPassword', { required: 'Enter a old password' })} />
+                        {errorsPassword.oldPassword && <span className="ErrorValidation" >{errorsPassword.oldPassword.message}</span>}
+                    </div>
 
-                <form onSubmit={this.handleChangePassword}>
-                    <label>
-                        Change password:
-                        <input type="password" placeholder="Old password..." name="oldPassword" value={oldPassword} onChange={this.handleChange} required />
-                        <input type="password" placeholder="New password..." name="newPassword" value={newPassword} onChange={this.handleChange} required />
-                        <input type="password" placeholder="Confirm password..." name="confirmPassword" value={confirmPassword} onChange={this.handleChange} required />
-                    </label>
-                    <button type="submit">Change</button>
+                    <div className="InputForm">
+                        <input type="password" id="newPassword" placeholder="New password..." {...password('newPassword', { required: 'Enter a new password', minLength: { value: 8, message: 'Password must be at least 8 characters long' }, pattern: { value: /^(?=.*\d)(?=.*[A-Z]).+$/, message: 'Password must contain at least one uppercase letter and a number' } })} />
+                        {errorsPassword.newPassword && <span className="ErrorValidation">{errorsPassword.newPassword.message}</span>}
+                    </div>
+
+                    <div className="InputForm">
+                        <input type="password" id="confirmPassword" placeholder="Confirm password..." {...password('confirmPassword', { required: 'Confirm your password', validate: value => value === passwordd || 'Passwords do not match' })} />
+                        {errorsPassword.confirmPassword && <span className="ErrorValidation">{errorsPassword.confirmPassword.message}</span>}
+                    </div>
+
+                    <button className="AllButton" type="submit">Change password</button>
                 </form>
-                {<p>{errorMessage}</p>}
-                {<p>{succeed}</p>}
+                <br />
                 <NavLink to="/profile">
-                    <button>Go Back</button>
+                    <button className="AllButton">Go Back</button>
                 </NavLink>
             </>
         );
-    }
+    };
 
-    render() {
-        let contents = this.state.loading ? <p><em>Loading...</em></p> : this.renderProfile(this.state.user);
+    let contents = loading ? <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }} ><ThreeDots color="#00BFFF" height={80} width={80} /></div> : renderProfile(user);
 
-        return (
-            <div>
-                {contents}
-            </div>
-        );
-    }
+    return (
+        <div>
+            {contents}
+        </div>
+    );
+};
 
-    async populateProfile() {
-        try {
-            axios.defaults.headers.common["xAuthAccessToken"] = localStorage.getItem("accessToken");
-            const response = await axios.get('/user/GetUserByAccessToken');
-            delete axios.defaults.headers.common["xAuthAccessToken"];
-            this.setState({ user: response.data, loading: false });
-        }
-        catch (err) {
-            console.log(err);
-        }
-    }
-}
+export default Settings;

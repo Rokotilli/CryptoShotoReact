@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import axios from '../../../node_modules/axios/index';
+import { ThreeDots } from 'react-loader-spinner';
 
 export default class News extends Component {
     constructor(props) {
@@ -27,7 +28,7 @@ export default class News extends Component {
     }
 
     render() {
-        let contents = this.state.loading ? <p><em>Loading...</em></p> : News.renderNews(this.state.news);
+        let contents = this.state.loading ? <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }} ><ThreeDots color="#00BFFF" height={80} width={80} /></div> : News.renderNews(this.state.news);
 
         return (
             <div>

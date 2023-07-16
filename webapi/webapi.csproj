@@ -8,7 +8,6 @@
 
   <ItemGroup>
     <None Remove="ModelsForReact\ChangePasswordModel" />
-    <None Remove="ModelsForReact\NewFile.txt" />
   </ItemGroup>
 
   <ItemGroup>

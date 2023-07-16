@@ -23,19 +23,21 @@ export const checkLogged = async () => {
             }           
 
             return true;
+            
         }
 
         localStorage.clear();
-        return false; 
+        
+        return false;
     }
-
+    
     return false;
 }
 
 export const LogOut = async () => {
     try {
         axios.defaults.headers.common["xAuthRefreshToken"] = localStorage.getItem("refreshToken");
-        const response = await axios.delete("/user/DeleteRefreshToken");
+        await axios.delete("/user/DeleteRefreshToken");
         delete axios.defaults.headers.common["xAuthRefreshToken"];
 
         localStorage.clear();

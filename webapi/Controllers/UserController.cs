@@ -26,7 +26,7 @@ namespace webapi.Controllers
             var model = await _userLogic.LoginUser(user);
 
             if (model == null)
-                return NotFound();
+                return NotFound("Wrong email or password.");
 
             return Ok(model);
         }
@@ -34,12 +34,13 @@ namespace webapi.Controllers
         [HttpPost("SignUp")]
         public async Task<ActionResult> Reg(User_Model user)
         {
+            user.Avatar = Convert.FromBase64String(user.ClientAvatar);
             var model = await _userLogic.Registration(user);
 
-            if (model == false)
-                return BadRequest();
+            if (model != "OK")
+                return BadRequest(model);
 
-            return Ok(model);
+            return Ok();
         }
 
         [HttpGet("GetUserByAccessToken")]
@@ -120,6 +121,19 @@ namespace webapi.Controllers
             if (model == false)
                 return BadRequest();
             
+            return Ok();
+        }
+
+        [HttpPost("ChangeAvatar")]
+        public async Task<ActionResult> ChangeAvatar([FromHeader] string xAuthAccessToken, [FromBody] Avatar avatar)
+        {
+            var byteavatar = Convert.FromBase64String(avatar.avatar);
+
+            var result = await _userLogic.ChangeAvatar(xAuthAccessToken, byteavatar);
+
+            if (result == false)
+                return BadRequest();
+
             return Ok();
         }
     }

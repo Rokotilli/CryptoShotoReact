@@ -10,10 +10,14 @@ namespace DAL.Models
 {
     public class User_Model 
     {
-        public string Email { get; set; }
+        public string Email { get; set; } = "";
 
-        public string Password { get; set; }
+        public string Password { get; set; } = "";
 
-        public string Name { get; set; }
+        public string Name { get; set; } = "";
+
+        public byte[] Avatar { get; set; } = new byte[0];
+
+        public string ClientAvatar { get; set; } = "";
     }
 }

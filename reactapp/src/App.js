@@ -1,36 +1,35 @@
-import React, { Component } from 'react';
+import React from 'react';
 import { Route, Routes } from 'react-router-dom';
-import Coins from './components/Coins/Coins';
 import { Login } from './components/Login/Login';
-import { Navbar } from './components/Navbar/Navbar';
+import Navbar from './components/Navbar/Navbar';
 import News from './components/News/News';
 import Profile from './components/Profile/Profile';
 import Settings from './components/Profile/Settings/Settings';
 import Registration from './components/Registration/Registration';
-//import AuthContext from './contexts/AuthContext';
-
-export default class App extends Component {
-    static displayName = App.name;
-
-    render() {
-        return (
-            <div>
-                <Navbar />
-                <Routes>
-                    <Route path="/" element={<News />} />
-                    <Route path="/coins" element={<Coins />} />
-                    <Route path="/login" element={<Login />} />
-                    <Route path="/signup" element={<Registration />} />
-                    <Route path="/profile" element={<Profile />} />
-                    <Route path="/profile/settings" element={<Settings />} />
-                </Routes>
-                <hr />
+import Wallet from './components/Wallet/Wallet';
+import 'react-toastify/dist/ReactToastify.css';
+import "./components/css/forall.css";
+export default function App() {
+    return (
+        <>
+            <Navbar>
+                <div className="container">
+                    <Routes>
+                        <Route path="/" element={<News />} />
+                        <Route path="/login" element={<Login />} />
+                        <Route path="/signup" element={<Registration />} />
+                        <Route path="/profile" element={<Profile />} />
+                        <Route path="/profile/settings" element={<Settings />} />
+                        <Route path="/wallet" element={<Wallet />} />
+                    </Routes>
+                </div>
                 <footer>
+                <hr />
                     <p>&copy; 2023 - CryptoShoto.</p>
                     <br />
                 </footer>
-            </div>
-        );
-    }
+            </ Navbar>
+        </>
+    );
 }       
        

@@ -9,6 +9,7 @@ namespace DAL.Repositories.Contracts
 {
     public interface IWalletRepository : IGenericRepository<Wallet>
     {
-        public Task<List<Wallet>> GetAllByIdAsync(string id);
+        Task<List<Wallet>> GetAllByIdAsync(string userid);
+        Task<List<WalletForReact>> GetAllByIdForReactAsync(string userid);
     }
 }

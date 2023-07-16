@@ -15,9 +15,9 @@ namespace webapi.Controllers
         }
 
         [HttpPost("BuyCoin")]
-        public async Task<ActionResult> BuyCoin([FromBody] List<string> ids)
+        public async Task<ActionResult> BuyCoin([FromHeader] string xAuthAccessToken, [FromBody] WalletForReact wallet)
         {
-            var model = await _walletLogic.BuyCoin(ids);
+            var model = await _walletLogic.BuyCoin(xAuthAccessToken, wallet);
 
             if (model == false)
                 return BadRequest();
@@ -26,9 +26,9 @@ namespace webapi.Controllers
         }
 
         [HttpGet("GetAllWallets")]
-        public async Task<ActionResult<List<Wallet>>> GetAllWallets([FromQuery] string email)
+        public async Task<ActionResult<List<WalletForReact>>> GetAllWallets([FromHeader] string xAuthAccessToken)
         {
-            var model = await _walletLogic.GetAllWallets(email);
+            var model = await _walletLogic.GetAllWallets(xAuthAccessToken);
 
             if (model == null)
                 return NotFound();
@@ -37,9 +37,10 @@ namespace webapi.Controllers
         }
 
         [HttpPost("SellCoin")]
-        public async Task<ActionResult> SellCoin([FromBody] List<string> ids)
+        public async Task<ActionResult> SellCoin([FromHeader] string xAuthAccessToken, [FromBody] WalletForReact wallet)
         {
-            var model = await _walletLogic.SellCoin(ids);
+            var model = await _walletLogic.SellCoin(xAuthAccessToken, wallet);
+            Console.WriteLine(model);
 
             if (model == false)
                 return BadRequest();
