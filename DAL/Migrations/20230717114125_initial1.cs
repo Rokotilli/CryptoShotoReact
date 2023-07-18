@@ -5,25 +5,25 @@
 namespace DAL.Migrations
 {
     /// <inheritdoc />
-    public partial class initial3 : Migration
+    public partial class initial1 : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.AddColumn<byte[]>(
-                name: "Avatar",
-                table: "AspNetUsers",
-                type: "varbinary(max)",
+            migrationBuilder.AddColumn<string>(
+                name: "Title",
+                table: "Posts",
+                type: "nvarchar(max)",
                 nullable: false,
-                defaultValue: new byte[0]);
+                defaultValue: "");
         }
 
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropColumn(
-                name: "Avatar",
-                table: "AspNetUsers");
+                name: "Title",
+                table: "Posts");
         }
     }
 }

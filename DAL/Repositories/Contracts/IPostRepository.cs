@@ -8,8 +8,8 @@ using System.Threading.Tasks;
 
 namespace DAL.Repositories.Contracts
 {
-    public interface ICoinRepository : IGenericRepository<Coin>
+    public interface IPostRepository : IGenericRepository<Post>
     {
-        Task<Pagination<Coin>> GetCoinsPagged(QueryStringParameters queryStringParameters);
+        public Task<Pagination<Post>> GetPaggedByIdForReactAsync(string userid, QueryStringParameters queryStringParameters);
     }
 }

@@ -13,12 +13,14 @@ namespace DAL.Repositories
         public MyContext databaseContext { get; }
         public IWalletRepository WalletRepository { get; }
         public ICoinRepository CoinRepository { get; }
+        public IPostRepository PostRepository { get; }
 
-        public UnitOfWork(MyContext databaseContext, IWalletRepository WalletRepository, ICoinRepository CoinRepository)
+        public UnitOfWork(MyContext databaseContext, IWalletRepository WalletRepository, ICoinRepository CoinRepository, IPostRepository postRepository)
         {
             this.databaseContext = databaseContext;
             this.CoinRepository = CoinRepository;
             this.WalletRepository = WalletRepository;
+            this.PostRepository = postRepository;
         }
 
         public async Task SaveChangesAsync()

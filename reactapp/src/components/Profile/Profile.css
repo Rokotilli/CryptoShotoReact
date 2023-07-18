@@ -1,7 +1,3 @@
-.allcomponents {
-   
-}
-
 .firstcomponent {
     display: flex;
     align-items: center;
@@ -10,10 +6,8 @@
 .avatar {
     width: 130px;
     height: 130px;
-    border-radius: 50%;
-    
+    border-radius: 50%;    
     transition: filter 1s ease; 
-
 }
 
 .edit-button {
@@ -31,32 +25,26 @@
     transition: transform 0.2s ease;
     transition: padding 0.1s ease;
 }
-    .edit-button input {
-        position: absolute;
-        opacity: 0;
-        width: 100%;
-        height: 100%;
-        cursor: pointer;
-    }
-
-    .edit-button:hover {
-
-        padding: 5px 15px;
-    }
-
-
-.avatar-container {
-
-    position: relative;
-
+.edit-button input {
+    position: absolute;
+    opacity: 0;
+    width: 100%;
+    height: 100%;
+    cursor: pointer;
 }
 
+.edit-button:hover {
 
+    padding: 5px 15px;
+}
 
-    .avatar-container:hover .avatar {
-        filter: brightness(60%);
-    }
+.avatar-container {
+    position: relative;
+}
 
+.avatar-container:hover .avatar {
+    filter: brightness(60%);
+}
 
 .LogoutSettingButtons{
     display: flex;
@@ -64,3 +52,4 @@
     max-width:150px;
     max-height:20px;
 }
+

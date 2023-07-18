@@ -25,18 +25,21 @@
     justify-content: center;
     align-items: center;
     background-color: transparent;
-    transition: padding 0.5s, background-color 0.5s;
+    transition: padding 0.2s, background-color 0.2s;
 }
 
-    .NavBarButton:hover {
-        padding: 6px 9px;
-        background-color: #2b2b2b;
-    }
-
+.NavBarButton:hover {
+    padding: 6px 9px;
+    background-color: #2b2b2b;
+}
 
 .NavAvatar {
     margin-left: 10px;
     width: 30px;
     height: 30px;
     border-radius: 50%;
+}
+
+.active {
+    color: aliceblue;
 }

@@ -1,5 +1,6 @@
 ﻿using DAL.Models;
 using DAL.Repositories.Contracts;
+using DAL.Repositories.Pagination;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -15,6 +16,15 @@ namespace DAL.Repositories
         public CoinRepository(MyContext databaseContext)
           : base(databaseContext)
         {
+        }
+
+        public async Task<Pagination<Coin>> GetCoinsPagged(QueryStringParameters queryStringParameters)
+        {
+            var coins = databaseContext.coins.AsEnumerable();
+
+            var paged_list_coins = await Pagination<Coin>.ToPagedListAsync(coins, queryStringParameters.PageNumber, queryStringParameters.PageSize);
+
+            return paged_list_coins;
         }
     }
 }

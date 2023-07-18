@@ -1,93 +1,60 @@
-import React, { Component } from 'react';
-import axios from '../../../node_modules/axios/index';
-import { AddToStorage } from '../../Functions/Functions';
-import { checkLogged } from '../../Functions/Functions';
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
+import { AddToStorage, checkLogged } from '../../Functions/Functions';
 import { Navigate } from 'react-router';
 import { ToastContainer, toast } from 'react-toastify';
 import { ThreeDots } from 'react-loader-spinner';
+import '../Registration/registration.css';
 
-export class Login extends Component {
-    constructor(props) {
-        super(props);
-        this.state = { name: '', email: '', password: '', loading: true, isLoggedIn: false};
-    }
+const Login = () => {
+    const [email, setEmail] = useState('');
+    const [password, setPassword] = useState('');
+    const [loading, setLoading] = useState(true);
+    const [isLoggedIn, setIsLoggedIn] = useState(false);
+    const [loadingButton, setLoadingButton] = useState(false);
+    const [loadingOverlay, setLoadingOverlay] = useState(false);
 
-    async componentDidMount() {
-        const isLoggedIn = this.state.isLoggedIn;
+    useEffect(() => {
+        const checkLoginStatus = async () => {
+            try {
+                const isLoggedIn = await checkLogged();
 
-        try {
-            const isLoggedIn2 = await checkLogged();
-           
-            if (!isLoggedIn2) {
-                this.setState({ isLoggedIn });                
-                this.setState({ loading: false });
-                return;
+                if (!isLoggedIn) {
+                    setLoading(false);
+                    return;
+                }
+
+                setIsLoggedIn(true);
+                setLoading(false);
+            } catch (err) {
+                console.log(err);
             }
-            this.setState({ isLoggedIn:true });
-            this.setState({ loading: false });
+        };
+
+        checkLoginStatus();
+    }, []);
+
+    const handleChange = (e) => {
+        if (e.target.name === 'email') {
+            setEmail(e.target.value);
+        } else if (e.target.name === 'password') {
+            setPassword(e.target.value);
         }
-        catch (err) {
-            console.log(err);
-        }
-    }
-        
-    renderLogin() {
-        const { email, password, isLoggedIn } = this.state;
-                
-        if (isLoggedIn) {
-            return <Navigate to="/" />;
-        }
-
-        return (            
-            <div>
-                <ToastContainer position="top-right" autoClose={5000} hideProgressBar newestOnTop closeOnClick rtl={false} pauseOnFocusLoss draggable pauseOnHover />
-                <h2>Login</h2>
-
-                <form onSubmit={this.confirmLogin}>
-                    <label>
-                        Email:
-                        <input type="email" name="email" value={email} onChange={this.handleChange} required />
-                    </label>
-                    <br /><br />
-                    <label>
-                        Password:
-                        <input type="password" name="password" value={password} onChange={this.handleChange} required /> <br />
-                    </label>
-                    <br />
-
-                    <button type="submit" className="AllButton">Login</button>
-                </form>
-            </div>
-        );
-    }
-
-    render() {
-        let content = this.state.loading ? <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }} ><ThreeDots color="#00BFFF" height={80} width={80} /></div> : this.renderLogin();
-        
-        return (
-            <div>
-                { content }
-            </div>
-        );
-    }
-
-    handleChange = (e) => {
-        this.setState({ [e.target.name]: e.target.value });
     };
 
-    confirmLogin = async (e) => {
+    const confirmLogin = async (e) => {
         e.preventDefault();
 
-        const { email, password, name } = this.state;
+        setLoadingButton(true);
+        setLoadingOverlay(true);
 
         try {
-            const response = await axios.post('user/LogIn', { email, password, name });
+            const response = await axios.post('user/LogIn', { email, password });
             AddToStorage(response);
             window.location.href = '/';
-        }
-        catch (err) {
+        } catch (err) {
             toast.error(err.response.data, {
-                position: "top-right",
+                position: 'top-right',
                 autoClose: 5000,
                 hideProgressBar: false,
                 closeOnClick: true,
@@ -95,6 +62,55 @@ export class Login extends Component {
                 draggable: true,
                 progress: undefined,
             });
+            setLoadingButton(false);
+            setLoadingOverlay(false);
         }
-    }
-}
+    };
+
+    const renderLogin = () => {
+        if (isLoggedIn) {
+            return <Navigate to="/" />;
+        }
+
+        return (
+            <div>
+                <div className={`overlay ${loadingOverlay ? 'visible' : ''}`}>
+                    <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>
+                        <ThreeDots color="#00BFFF" height={80} width={80} />
+                    </div>
+                </div>
+
+                <ToastContainer position="top-right" autoClose={5000} hideProgressBar newestOnTop closeOnClick rtl={false} pauseOnFocusLoss draggable pauseOnHover />
+
+                <form onSubmit={confirmLogin} className="registration-form">
+                    <h2>Login</h2>
+                    <label className="form-group">
+                        Email:
+                        <input type="email" name="email" value={email} onChange={handleChange} required />
+                    </label>
+                    <label className="form-group">
+                        Password:
+                        <input type="password" name="password" value={password} onChange={handleChange} required /> <br />
+                    </label>
+                    <br />
+
+                    <button type="submit" className={`AllButton ${loadingButton ? 'disabled' : ''}`} disabled={loadingButton}>
+                        Login
+                    </button>
+                </form>
+            </div>
+        );
+    };
+
+    let content = loading ? (
+        <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>
+            <ThreeDots color="#00BFFF" height={80} width={80} />
+        </div>
+    ) : (
+        renderLogin()
+    );
+
+    return <div>{content}</div>;
+};
+
+export default Login;

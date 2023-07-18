@@ -13,8 +13,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DAL.Migrations
 {
     [DbContext(typeof(MyContext))]
-    [Migration("20230716134827_initial4")]
-    partial class initial4
+    [Migration("20230717110556_initial")]
+    partial class initial
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -71,6 +71,39 @@ namespace DAL.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("News", (string)null);
+                });
+
+            modelBuilder.Entity("DAL.Models.Post", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("DatabaseGenerated", DatabaseGeneratedOption.Identity);
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTime?>("Date")
+                        .HasColumnType("datetime")
+                        .HasColumnName("Date");
+
+                    b.Property<byte[]>("Photo")
+                        .IsRequired()
+                        .HasColumnType("varbinary(max)");
+
+                    b.Property<string>("Text")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("UserId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)")
+                        .HasColumnName("UserId");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("Posts", (string)null);
                 });
 
             modelBuilder.Entity("DAL.Models.RefreshToken", b =>
@@ -325,6 +358,18 @@ namespace DAL.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
+            modelBuilder.Entity("DAL.Models.Post", b =>
+                {
+                    b.HasOne("DAL.Models.User", "User")
+                        .WithMany("Posts")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired()
+                        .HasConstraintName("FK__PostsTo__user");
+
+                    b.Navigation("User");
+                });
+
             modelBuilder.Entity("DAL.Models.RefreshToken", b =>
                 {
                     b.HasOne("DAL.Models.User", "User")
@@ -414,6 +459,8 @@ namespace DAL.Migrations
 
             modelBuilder.Entity("DAL.Models.User", b =>
                 {
+                    b.Navigation("Posts");
+
                     b.Navigation("RefreshTokens");
 
                     b.Navigation("Wallets");

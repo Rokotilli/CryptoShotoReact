@@ -1,5 +1,7 @@
 ﻿using BLL.Interfaces;
 using DAL.Models;
+using DAL.Repositories.Pagination;
+using DAL.Repositories;
 using Microsoft.AspNetCore.Mvc;
 
 namespace webapi.Controllers
@@ -25,15 +27,26 @@ namespace webapi.Controllers
             return Ok();
         }
 
-        [HttpGet("GetAllWallets")]
-        public async Task<ActionResult<List<WalletForReact>>> GetAllWallets([FromHeader] string xAuthAccessToken)
+        [HttpGet("GetPaginatedWallets")]
+        public async Task<ActionResult<List<Coin>>> GetAllWallets([FromHeader] string xAuthAccessToken, [FromQuery] QueryStringParameters queryParameters)
         {
-            var model = await _walletLogic.GetAllWallets(xAuthAccessToken);
+            var result = await _walletLogic.GetAllWallets(xAuthAccessToken, queryParameters);
 
-            if (model == null)
-                return NotFound();
+            if (result != null)
+                return Ok(result);
 
-            return Ok(model);
+            return BadRequest();
+        }
+
+        [HttpGet("GetCountOfAllWallets")]
+        public async Task<ActionResult<int>> GetCountOfAllWallets([FromHeader] string xAuthAccessToken)
+        {
+            var result =  await _walletLogic.GetCountOfUserWallets(xAuthAccessToken);
+
+            if (result == 0 || result == null)
+                return BadRequest();
+
+            return Ok(result);
         }
 
         [HttpPost("SellCoin")]

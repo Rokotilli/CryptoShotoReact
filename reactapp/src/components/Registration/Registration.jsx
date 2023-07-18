@@ -11,7 +11,10 @@ import { ThreeDots } from 'react-loader-spinner';
 const Registration = () => {
     const [clientAvatar, setClientAvatar] = useState('');
     const [loading, setLoading] = useState(true);
+    const [loadingButton, setLoadingButton] = useState(false);
+    const [loadingOverlay, setLoadingOverlay] = useState(false);
     const [isLoggedIn, setIsLoggedIn] = useState(false);
+
     const { register, handleSubmit, formState: { errors }, watch } = useForm();
 
     useEffect(() => {
@@ -59,8 +62,8 @@ const Registration = () => {
             });
             e.target.value = null;
             return;
-
         }
+
         if (file) {
             const img = new Image();
             img.onload = () => {
@@ -92,6 +95,15 @@ const Registration = () => {
 
                         });   
                         setClientAvatar(base64Avatar);    
+                        toast.success('File uploaded successfully!', {
+                            position: "top-right",
+                            autoClose: 5000,
+                            hideProgressBar: false,
+                            closeOnClick: true,
+                            pauseOnHover: true,
+                            draggable: true,
+                            progress: undefined,
+                        });
                     };
                     reader.readAsArrayBuffer(file);
                 }
@@ -107,7 +119,8 @@ const Registration = () => {
 
     const confirmRegistration = async (data) => {
         const { name, email, password } = data;
-
+        setLoadingButton(true);
+        setLoadingOverlay(true);
         try {
             await axios.post('user/signup', { name, email, password, clientAvatar });
             const response2 = await axios.post('user/LogIn', { email, password, name });
@@ -124,6 +137,8 @@ const Registration = () => {
                 draggable: true,
                 progress: undefined,
             });
+            setLoadingButton(false);
+            setLoadingOverlay(false);
         }
     };
 
@@ -136,48 +151,55 @@ const Registration = () => {
 
         return (
             <div>
-                <ToastContainer position="top-right" autoClose={5000} hideProgressBar newestOnTop closeOnClick rtl={false} pauseOnFocusLoss draggable pauseOnHover />
-                <h2>Registration</h2>
+                <div className={`overlay ${loadingOverlay ? 'visible' : ''}`}>
+                    <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>
+                        <ThreeDots color="#00BFFF" height={80} width={80} />
+                    </div>
+                </div>
 
-                <form onSubmit={handleSubmit(confirmRegistration)}>
-                    <div className="InputForm">
+                <ToastContainer position="top-right" autoClose={5000} hideProgressBar newestOnTop closeOnClick rtl={false} pauseOnFocusLoss draggable pauseOnHover />
+
+                <form onSubmit={handleSubmit(confirmRegistration)} className="registration-form">
+                    <h2>Registration</h2>
+                    <div className="form-group">
                         <label htmlFor="name">Name:</label>
                         <input type="text" id="name" {...register('name', {  required: 'Enter your username', minLength: { value: 3, message: 'Username must be at least 3 characters long' }, maxLength: { value: 10, message: 'Username must not exceed 15 characters' } })} />
-                        {errors.name && <span className="ErrorValidation">{errors.name.message}</span>}
+                        {errors.name && <span className="error">{errors.name.message}</span>}
                     </div>
 
-                    <div className="InputForm">
+                    <div className="form-group">
                         <label htmlFor="email">Email:</label>
                         <input type="email" id="email" {...register('email', { required: 'Enter your email', pattern: { value: /^\S+@\S+$/, message: 'Enter a valid email' } })} />
-                        {errors.email && <span className="ErrorValidation">{errors.email.message}</span>}
+                        {errors.email && <span className="error">{errors.email.message}</span>}
                     </div>
 
-                    <div className="InputForm">
+                    <div className="form-group">
                         <label htmlFor="password">Password:</label>
                         <input type="password" id="password" {...register('password', { required: 'Enter a password', minLength: { value: 8, message: 'Password must be at least 8 characters long' }, pattern: { value: /^(?=.*\d)(?=.*[A-Z]).+$/, message: 'Password must contain at least one uppercase letter and a number' } })} />
-                        {errors.password && <span className="ErrorValidation">{errors.password.message}</span>}
+                        {errors.password && <span className="error">{errors.password.message}</span>}
                     </div>
 
-                    <div className="InputForm">
+                    <div className="form-group">
                         <label htmlFor="confirmPassword">Confirm password:</label>
                         <input type="password" id="confirmPassword" {...register('confirmPassword', { required: 'Confirm your password', validate: value => value === passwordd || 'Passwords do not match' })} />
-                        {errors.confirmPassword && <span className="ErrorValidation">{errors.confirmPassword.message}</span>}
+                        {errors.confirmPassword && <span className="error">{errors.confirmPassword.message}</span>}
                     </div>
 
-                    <div className="InputForm">
-                        <label htmlFor="clientAvatar">Avatar:</label>
-                        <input type="file" id="clientAvatar" name="clientAvatar" accept="image/*" {...register('clientAvatar', { required: 'Upload an avatar'})} onChange={handleImageUpload} />
-                        {errors.clientAvatar && clientAvatar === '' && <span className="ErrorValidation">{errors.clientAvatar.message}</span>}
+                    {clientAvatar !== "" ? <div>
+                        <img src={`data:image/png;base64,${clientAvatar}`} className="avatar" alt="" />
+                    </div> : <></> }
+
+                    <div className="file-upload">
+                        <label htmlFor="clientAvatar" className="custom-file-upload">Click to select Avatar
+                        <input type="file" id="clientAvatar" name="clientAvatar" placeholder="" accept="image/*" {...register('clientAvatar', { required: 'Upload an avatar' })} onChange={handleImageUpload} />
+                        </label>
+                        {errors.clientAvatar && clientAvatar === '' && <span className="error">{errors.clientAvatar.message}</span>}
                     </div>
 
                     <br />
-                    <button type="submit" className="AllButton">Registration</button>
-                </form>
-
-
-                
-            </div>
-          
+                    <button type="submit" className={`AllButton ${loadingButton ? 'disabled' : ''}`} disabled={loadingButton}>SignUp</button>
+                </form>  
+            </div>          
         );
     };
 

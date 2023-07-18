@@ -15,6 +15,7 @@ namespace DAL
         public DbSet<User> users { get; set; }
         public DbSet<Wallet> wallets { get; set; }
         public DbSet<News> news { get; set; }
+        public DbSet<Post> posts { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -71,6 +72,27 @@ namespace DAL
                .IsRequired()
                .ValueGeneratedOnAdd()
                .HasAnnotation("DatabaseGenerated", DatabaseGeneratedOption.Identity);
+            });
+
+            modelBuilder.Entity<Post>(entity =>
+            {
+                entity.ToTable("Posts")
+                .HasKey(w => w.Id);
+
+                entity.Property(w => w.Id)
+               .IsRequired()
+               .ValueGeneratedOnAdd()
+               .HasAnnotation("DatabaseGenerated", DatabaseGeneratedOption.Identity);
+
+                entity.Property(e => e.Date)
+                    .HasColumnName("Date")
+                    .HasColumnType("datetime");
+                entity.Property(e => e.UserId).HasColumnName("UserId");
+
+                entity.HasOne(d => d.User)
+                    .WithMany(p => p.Posts)
+                    .HasForeignKey(d => d.UserId)
+                    .HasConstraintName("FK__PostsTo__user");
             });
         }
     }

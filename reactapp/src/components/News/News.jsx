@@ -1,51 +1,49 @@
-import React, { Component } from 'react';
-import axios from '../../../node_modules/axios/index';
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
 import { ThreeDots } from 'react-loader-spinner';
 
-export default class News extends Component {
-    constructor(props) {
-        super(props);
-        this.state = { news: [], loading: true };
-    }
+const News = () => {
+    const [news, setNews] = useState([]);
+    const [loading, setLoading] = useState(true);
 
-    componentDidMount() {
-        this.populateNews();
-    }
+    useEffect(() => {
+        const populateNews = async () => {
+            try {
+                const response = await axios.get('news/GetAllNews');
+                setNews(response.data);
+                setLoading(false);
+            } catch (err) {
+                console.log(err);
+            }
+        };
 
-    static renderNews(news) {
+        populateNews();
+    }, []);
+
+    const renderNews = (newsData) => {
         return (
             <table className='table table-striped' aria-labelledby="tabelLabel">
                 <tbody>
-                    {news.map(news =>
-                        <tr key={news.id}>
-                            <td>{news.title}</td>
-                            <td>{news.text}</td>
+                    {newsData.map((newsItem) => (
+                        <tr key={newsItem.id}>
+                            <td>{newsItem.title}</td>
+                            <td>{newsItem.text}</td>
                         </tr>
-                    )}
+                    ))}
                 </tbody>
             </table>
         );
-    }
+    };
 
-    render() {
-        let contents = this.state.loading ? <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }} ><ThreeDots color="#00BFFF" height={80} width={80} /></div> : News.renderNews(this.state.news);
+    let contents = loading ? (
+        <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>
+            <ThreeDots color="#00BFFF" height={80} width={80} />
+        </div>
+    ) : (
+        renderNews(news)
+    );
 
-        return (
-            <div>
-                {contents}
-            </div>
-        );
-    }
+    return <div>{contents}</div>;
+};
 
-    async populateNews() {
-        try {
-            const response = await axios.get('news/GetAllNews');
-            this.setState({ news: response.data, loading: false });
-        }
-        catch (err) {
-            console.log(err);
-        }
-    }
-}
-
-
+export default News;

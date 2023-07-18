@@ -41,7 +41,7 @@ const Navbar = ({ children }) => {
     }
 
     return (
-        <NavbarContext.Provider value={{ user, isLoggedIn }}>
+        <NavbarContext.Provider value={{ user }}>
         <div className="NavBarMain">
             <div className="NavBarMenu">
                 <NavLink to="/" className="NavBarButton">Home</NavLink>
@@ -49,7 +49,8 @@ const Navbar = ({ children }) => {
                 {!loading && (
                     <>
                         {isLoggedIn ? (
-                            <>
+                                <>
+                                <NavLink to="/recomendations" className="NavBarButton">Recomendations</NavLink>
                                 <NavLink to="/wallet" className="NavBarButton">Wallet</NavLink>
                                 <NavLink to="/profile" className="NavBarButton">
                                     Profile

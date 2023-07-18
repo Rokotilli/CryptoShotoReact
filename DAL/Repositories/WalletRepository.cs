@@ -1,7 +1,9 @@
 ﻿using DAL.Models;
 using DAL.Repositories.Contracts;
+using DAL.Repositories.Pagination;
 using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -21,7 +23,7 @@ namespace DAL.Repositories
             return databaseContext.wallets.Where(w => w.UserId == userid).ToList();
         }
 
-        public async Task<List<WalletForReact>> GetAllByIdForReactAsync(string userid)
+        public async Task<Pagination<WalletForReact>> GetPaggedByIdForReactAsync(string userid, QueryStringParameters queryStringParameters)
         {
             var result = databaseContext.wallets
                 .Join(databaseContext.users, w => w.UserId, u => u.Id, (w, u) => new { w, u })
@@ -30,9 +32,11 @@ namespace DAL.Repositories
                     CoinId = x.w.CoinId,
                     Count = x.w.Count,
                     CoinName = c.Name
-                }).Where(u => u.UserId == userid).ToList();
+                }).Where(u => u.UserId == userid).AsEnumerable();
 
-            return result;
+            var paged_list_coins = await Pagination<WalletForReact>.ToPagedListAsync(result, queryStringParameters.PageNumber, queryStringParameters.PageSize);
+
+            return paged_list_coins;
         }
     }
 }

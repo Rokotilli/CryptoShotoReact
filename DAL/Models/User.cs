@@ -17,5 +17,6 @@ namespace DAL.Models
         public byte[] Avatar { get; set; }
         public virtual ICollection<RefreshToken> RefreshTokens { get; set; }
         public virtual ICollection<Wallet> Wallets { get; set; }
+        public virtual ICollection<Post> Posts { get; set; }
     }
 }

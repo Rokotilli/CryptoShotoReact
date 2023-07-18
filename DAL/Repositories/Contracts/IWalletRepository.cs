@@ -1,4 +1,5 @@
 ﻿using DAL.Models;
+using DAL.Repositories.Pagination;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,6 +11,6 @@ namespace DAL.Repositories.Contracts
     public interface IWalletRepository : IGenericRepository<Wallet>
     {
         Task<List<Wallet>> GetAllByIdAsync(string userid);
-        Task<List<WalletForReact>> GetAllByIdForReactAsync(string userid);
+        Task<Pagination<WalletForReact>> GetPaggedByIdForReactAsync(string userid, QueryStringParameters queryStringParameters);
     }
 }

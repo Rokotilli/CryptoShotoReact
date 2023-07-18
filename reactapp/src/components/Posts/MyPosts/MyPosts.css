@@ -1,0 +1,88 @@
+.create-post-form {
+    max-width: 500px;
+}
+
+.form-group {
+    margin-bottom: 20px;
+}
+
+label {
+    display: block;
+    font-weight: bold;
+    margin-bottom: 5px;
+}
+
+input[type="text"],
+textarea {
+    width: 100%;
+    padding: 10px;
+    font-size: 16px;
+    border-radius: 4px;
+    border: 1px solid #ccc;
+}
+
+.text-area {
+    resize: none;
+    height: 200px;
+}
+
+.submit-button {
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 4px;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+.submit-button:hover {
+    background-color: #0056b3;
+}
+
+
+.Post {
+    margin-bottom:80px;
+    background: rgba(80, 255, 241, 0.2);
+    padding: 5px 10px 5px 10px;
+    display: flex;
+    border: 2px solid #000;
+}
+
+.Posts{
+    display:flex;
+    flex-direction:column;
+    max-width:50%;
+}
+
+.Up {
+    
+    display: flex;
+    justify-content: left;
+    margin-bottom: 8px;
+    
+    align-items:center;
+}
+.UpName {
+    font-weight: bold;
+    margin-right: auto;
+}
+.Forma{
+    margin-bottom:100px;
+}
+.UpAvatar {
+    margin-right:8px;
+    max-height: 50px;
+    border-radius: 50%;
+}
+.PostPhoto{
+    margin-top:30px;
+    max-width: 60%;
+}
+.PostText {
+    max-width: 500px;
+    word-wrap: break-word;
+}
+.PostTitle{
+
+}

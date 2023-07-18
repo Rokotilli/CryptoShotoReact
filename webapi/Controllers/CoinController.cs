@@ -1,5 +1,6 @@
 ﻿using DAL.Models;
 using DAL.Repositories.Contracts;
+using DAL.Repositories.Pagination;
 using Microsoft.AspNetCore.Mvc;
 
 namespace webapi.Controllers
@@ -8,21 +9,27 @@ namespace webapi.Controllers
     [ApiController]
     public class CoinController : ControllerBase
     {
-        private ICoinRepository coinRepository;
-        public CoinController(ICoinRepository coinRepository)
+        private IUnitOfWork unitOfWork;
+        public CoinController(IUnitOfWork unitOfWork)
         { 
-            this.coinRepository = coinRepository;
+            this.unitOfWork = unitOfWork;
         }
 
-        [HttpGet("GetAllCoins")]
-        public async Task<ActionResult<List<Coin>>> GetAllCoins()
+        [HttpGet("GetPaginatedCoins")]
+        public async Task<ActionResult<List<Coin>>> GetAllCoins([FromQuery] QueryStringParameters queryParameters)
         {
-            var result = await coinRepository.GetAllAsync();
+            var result = await unitOfWork.CoinRepository.GetCoinsPagged(queryParameters);
 
             if (result != null)
                 return Ok(result.ToList());
 
             return BadRequest();
+        }
+
+        [HttpGet("GetCountOfAllCoins")]
+        public async Task<ActionResult<int>> GetCountOfAllCoins()
+        {
+            return unitOfWork.databaseContext.coins.Count();
         }
     }
 }

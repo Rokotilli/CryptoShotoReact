@@ -7,6 +7,7 @@ import axios from '../../../node_modules/axios/index';
 import { ToastContainer, toast } from 'react-toastify';
 import "./Profile.css";
 import { ThreeDots } from 'react-loader-spinner';
+import MyPosts from '../Posts/MyPosts/MyPosts';
 
 const Profile = () => {
     const [loading, setLoading] = useState(true);
@@ -115,7 +116,6 @@ const Profile = () => {
         reader.onloadend = async () => {
             const imageData = reader.result;
             const blob = new Blob([new Uint8Array(imageData)], { type: file.type });
-
             const base64Avatar = await new Promise((resolve) => {
                 const reader = new FileReader();
                 reader.onloadend = () => resolve(reader.result.split(',')[1]);
@@ -129,7 +129,6 @@ const Profile = () => {
                 window.location.href = '/profile';
             }
             catch (err) {
-                console.log(err);
                 toast.error(err, {
                     position: "top-right",
                     autoClose: 5000,
@@ -155,10 +154,10 @@ const Profile = () => {
 
     const render = () => {
         let contents = loading ? <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }} ><ThreeDots color="#00BFFF" height={80} width={80} /></div>
-         : renderProfile();
+            : <>{renderProfile()}<MyPosts /></>;
         return (
             <div>
-                {contents}
+                {contents}                
             </div>
         );
     }
