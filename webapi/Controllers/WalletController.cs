@@ -43,7 +43,7 @@ namespace webapi.Controllers
         {
             var result =  await _walletLogic.GetCountOfUserWallets(xAuthAccessToken);
 
-            if (result == 0 || result == null)
+            if (result == 0)
                 return BadRequest();
 
             return Ok(result);
