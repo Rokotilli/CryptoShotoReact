@@ -10,6 +10,10 @@ namespace DAL.Repositories.Contracts
 {
     public interface IPostRepository : IGenericRepository<Post>
     {
-        public Task<Pagination<Post>> GetPaggedByIdForReactAsync(string userid, QueryStringParameters queryStringParameters);
+        public Task<Pagination<User_Post>> GetPaggedByIdForReactAsync(string userid, QueryStringParameters queryStringParameters);
+        public Task<Pagination<User_Post>> GetPaggedSomeoneByIdForReactAsync(string userid,string someonesid, QueryStringParameters queryStringParameters);
+        public Task<Pagination<User_Post>> GetPaggedReccomendationAsync(QueryStringParameters queryStringParameters);
+        public Task<Pagination<User_Post>> GetPaggedReccomendationForAuthAsync(QueryStringParameters queryStringParameters,string userId);
+        Task<Pagination<User_Post>> GetPaggedByFollowedPosts(string userid, QueryStringParameters queryStringParameters);
     }
 }

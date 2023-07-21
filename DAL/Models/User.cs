@@ -18,5 +18,7 @@ namespace DAL.Models
         public virtual ICollection<RefreshToken> RefreshTokens { get; set; }
         public virtual ICollection<Wallet> Wallets { get; set; }
         public virtual ICollection<Post> Posts { get; set; }
+        public virtual ICollection<Like> Likes { get; set; }
+        public virtual ICollection<Follow> Follows { get; set; }
     }
 }

@@ -136,5 +136,51 @@ namespace webapi.Controllers
 
             return Ok();
         }
+
+        [HttpGet("GetUserById")]
+        public async Task<ActionResult<User>> GetUserById([FromQuery] string id)
+        {
+            var user = await _userLogic.GetUserById(id);
+            if(user==null || user.Email == null)
+            {
+                return BadRequest();
+            }
+            return Ok(user);
+        }
+
+        [HttpPost("Follow")]
+        public async Task<ActionResult> Follow([FromHeader] string xAuthAccessToken, [FromQuery] string userid)
+        {
+            var result = await _userLogic.Follow(xAuthAccessToken, userid);
+
+            return Ok(result);
+        }
+
+        [HttpGet("CheckFollow")]
+        public async Task<ActionResult> CheckFollow([FromHeader] string xAuthAccessToken, [FromQuery] string userid)
+        {
+            var result = await _userLogic.IsSubscribed(xAuthAccessToken, userid);
+
+            return Ok(result);
+        }
+
+        [HttpGet("GetCountFollowers")]
+        public async Task<ActionResult> GetCountFollowers([FromQuery] string userid)
+        {
+            var result = await _userLogic.GetCountFollowers(userid);
+
+            return Ok(result);
+        }
+
+        [HttpGet("GetUsersSearched")]
+        public async Task<ActionResult<List<User>>> GetUsersSearched([FromQuery] string param)
+        {
+            var model = _userManager.Users.Where(u => u.UserName.Contains(param.ToLower()));
+
+            if (model == null)
+                return null;
+
+            return model.ToList();
+        } 
     }
 }

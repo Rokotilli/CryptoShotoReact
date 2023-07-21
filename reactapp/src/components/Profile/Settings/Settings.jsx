@@ -7,10 +7,12 @@ import { ToastContainer, toast } from 'react-toastify';
 import { useForm } from 'react-hook-form';
 import "../../css/forall.css";
 import { ThreeDots } from 'react-loader-spinner';
+import { useNavigate } from '../../../../node_modules/react-router-dom/dist/index';
 
 const Settings = () => {
-    const [loading, setLoading] = useState(true);
+    const navigate = useNavigate();
     const { user } = useContext(NavbarContext);
+    const [loading, setLoading] = useState(true);
     const [loadingOverlay, setLoadingOverlay] = useState(false);
     const { handleSubmit: handleSubmitName, register: username, formState: { errors: errorsName } } = useForm();
     const { handleSubmit: handleSubmitPassword, register: password, formState: { errors: errorsPassword }, watch } = useForm();
@@ -22,7 +24,7 @@ const Settings = () => {
                     setLoading(false);
                     return;
                 }
-                window.location.href = '/login';
+                navigate('/login');
             }
             catch (err) {
                 console.log(err);
@@ -34,7 +36,6 @@ const Settings = () => {
 
     const handleChangeName = async (data) => {
         setLoadingOverlay(true);
-
         if (user.userName === data.name) {
             toast.error('New username should not be the same as old username.', {
                 position: "top-right",

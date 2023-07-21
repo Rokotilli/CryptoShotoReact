@@ -33,8 +33,8 @@ const Registration = () => {
 
     const handleImageUpload = (e) => {
         const file = e.target.files[0];
-        const maxSize = 1 * 1024 * 1024;
-        const maxResolution = 1200;
+        const maxSize = 5 * 1024 * 1024;
+        const maxResolution = 1920;
 
         if (file && !isImageFile(file)) {
             toast.error('Allowed extensions: image/jpeg, image/png, image/svg+xml, image/webp.', {
@@ -163,7 +163,7 @@ const Registration = () => {
                     <h2>Registration</h2>
                     <div className="form-group">
                         <label htmlFor="name">Name:</label>
-                        <input type="text" id="name" {...register('name', {  required: 'Enter your username', minLength: { value: 3, message: 'Username must be at least 3 characters long' }, maxLength: { value: 10, message: 'Username must not exceed 15 characters' } })} />
+                        <input type="textR" id="name" {...register('name', {  required: 'Enter your username', minLength: { value: 3, message: 'Username must be at least 3 characters long' }, maxLength: { value: 15, message: 'Username must not exceed 15 characters' } })} maxLength="15" />
                         {errors.name && <span className="error">{errors.name.message}</span>}
                     </div>
 

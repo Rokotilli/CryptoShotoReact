@@ -4,23 +4,42 @@ const context = [
     "/coin/GetAllCoins",
     "/coin/GetPaginatedCoins",
     "/coin/GetCountOfAllCoins",
+
     "/news/GetAllNews",
+
     "/user/signup",
+    "/user/ChangeAvatar",
     "/user/LogIn",
     "/user/GetUserByAccessToken",
     "/user/ChangeName",
-    "/validatetoken/CheckToken",
-    "/validatetoken/CheckAndGiveAccessToken",
     "/user/DeleteRefreshToken",
     "/user/ChangePassword",
+    "/user/GetUserById",
+    "/user/Follow",
+    "/user/CheckFollow",
+    "/user/GetCountFollowers",
+    "/user/GetUsersSearched",
+
+    "/validatetoken/CheckToken",
+    "/validatetoken/CheckAndGiveAccessToken",
+
     "/wallet/GetCountOfAllWallets",
     "/wallet/GetPaginatedWallets",
     "/wallet/BuyCoin",
     "/wallet/SellCoin",
-    "/user/ChangeAvatar",
+
     "/post/GetUserPosts",
     "/post/GetCountOfUserPosts",
-    "/post/CreatePost"
+    "/post/CreatePost",
+    "/post/GetAllPosts",
+    "/post/GetCountPosts",
+    "/post/DeletePost",
+    "/post/SetLike",
+    "/post/GetCountOfSomeonesPosts",
+    "/post/GetSomeonesPosts",
+    "/post/EditPost",
+    "/post/GetAllFollowedPosts",
+    "/post/GetCountFollowedPosts"
 ];
 
 module.exports = function (app) {

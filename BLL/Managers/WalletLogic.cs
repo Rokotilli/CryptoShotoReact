@@ -33,6 +33,9 @@ namespace BLL.Managers
 
                 var user = await GetUserFromAccessToken(xAuthAccessToken);
 
+                if (user.Email == null)
+                    return false;
+
                 Wallet temp = new Wallet();
 
                 temp.UserId = user.Id;
@@ -78,6 +81,9 @@ namespace BLL.Managers
                 float count = model.Count;
 
                 var user = await GetUserFromAccessToken(xAuthAccessToken);
+
+                if (user.Email == null)
+                    return false;
 
                 Wallet temp = new Wallet();
 
@@ -126,7 +132,7 @@ namespace BLL.Managers
         {
             var user = await GetUserFromAccessToken(accessToken);
 
-            if (user == null)
+            if (user.Email == null)
                 return null;
 
             var result = await _unitOfWork.WalletRepository.GetPaggedByIdForReactAsync(user.Id, queryStringParameters);
@@ -143,7 +149,7 @@ namespace BLL.Managers
         {
             var user = await GetUserFromAccessToken(accessToken);
 
-            if (user == null)
+            if (user.Email == null)
                 return 0;
 
             var result = _unitOfWork.databaseContext.wallets.Where(e=>e.UserId==user.Id).Count();

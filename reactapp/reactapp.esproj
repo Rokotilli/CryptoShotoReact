@@ -18,6 +18,7 @@
     <Folder Include="src\components\Posts\MyPosts\" />
     <Folder Include="src\components\Posts\AllPosts\" />
     <Folder Include="src\components\Profile\Settings\" />
+    <Folder Include="src\components\Profile\SomeoneProfile\" />
     <Folder Include="src\components\Wallet\Coins\" />
     <Folder Include="src\components\Wallet\Wallets\" />
     <Folder Include="src\Functions\" />
@@ -30,5 +31,11 @@
   </ItemGroup>
   <ItemGroup>
     <None Remove="src\components\Registration\NewFile.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Remove="src\components\Posts\FollowedPosts\NewFile.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Remove="src\components\Posts\FollowedPosts\FollowedPosts" />
   </ItemGroup>
 </Project>

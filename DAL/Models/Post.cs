@@ -10,5 +10,6 @@
         public DateTime? Date { get; set; }
 
         public User User { get; set; }
+        public virtual ICollection<Like> Likes { get; set; }
     }
 }

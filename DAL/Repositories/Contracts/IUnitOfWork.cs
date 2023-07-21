@@ -12,6 +12,7 @@ namespace DAL.Repositories.Contracts
         ICoinRepository CoinRepository { get; }
         IWalletRepository WalletRepository { get; }
         IPostRepository PostRepository { get; }
+        IFollowRepository FollowRepository { get; }
         Task SaveChangesAsync();
         MyContext databaseContext { get; }
     }

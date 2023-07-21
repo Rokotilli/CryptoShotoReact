@@ -206,7 +206,7 @@ namespace BLL.Managers
         {
             var model = await GetUserFromAccessToken(accesstoken);
 
-            if (model == null)
+            if (model.Email == null)
                 return false;
 
             model.UserName = name;
@@ -221,7 +221,7 @@ namespace BLL.Managers
         {
             var model = await GetUserFromAccessToken(token);
 
-            if (model == null)
+            if (model.Email == null)
                 return false;
 
             var check = await _signInManager.PasswordSignInAsync(model.UserName, oldPassword, true, true);
@@ -238,11 +238,46 @@ namespace BLL.Managers
         {
             var user = await GetUserFromAccessToken(xAuthAccessToken);
 
+            if (user.Email == null)
+                return false;
+
             user.Avatar = byteavatar;
 
             _unitOfWork.databaseContext.users.Update(user);
             await _unitOfWork.SaveChangesAsync();
             return true;
+        }
+
+        public async Task<User> GetUserById(string id)
+        {
+            var user = await _userManager.FindByIdAsync(id);
+
+            return user;
+        }
+
+        public async Task<bool> IsSubscribed(string xAuthAccessToken, string userid)
+        {
+            var user = await GetUserFromAccessToken(xAuthAccessToken);
+
+            var result = await _unitOfWork.FollowRepository.IsSubscribed(userid, user.Id);
+
+            return result;
+        }
+
+        public async Task<bool> Follow(string xAuthAccessToken, string userid)
+        {
+            var user = await GetUserFromAccessToken(xAuthAccessToken);
+
+            var result = await _unitOfWork.FollowRepository.Follow(userid, user.Id);
+
+            return result;
+        }
+
+        public async Task<int> GetCountFollowers(string userid)
+        {
+            var count = await _unitOfWork.FollowRepository.CountOfFollowers(userid);
+
+            return count;
         }
     }
 }

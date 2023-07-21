@@ -36,11 +36,10 @@ export const checkLogged = async () => {
 
 export const LogOut = async () => {
     try {
+        localStorage.clear();
         axios.defaults.headers.common["xAuthRefreshToken"] = localStorage.getItem("refreshToken");
         await axios.delete("/user/DeleteRefreshToken");
         delete axios.defaults.headers.common["xAuthRefreshToken"];
-
-        localStorage.clear();
     }
     catch (err) {
         console.log(err);
@@ -51,3 +50,9 @@ export const AddToStorage = (response) => {
     localStorage.setItem("accessToken", response.data.accessToken);
     localStorage.setItem("refreshToken", response.data.refreshToken);
 }
+
+export const formatDateTime = (dateTimeString) => {
+    const dateTime = new Date(dateTimeString);
+    const options = { year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit' };
+    return dateTime.toLocaleString('ru-RU', options);
+};

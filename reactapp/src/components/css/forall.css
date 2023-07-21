@@ -6,7 +6,7 @@
     animation: fadeIn 1s forwards;
 }
 .container {
-    padding-top: 20px;
+    padding-top: 80px;
     width: 100%;
     max-width: 1200px;
     margin: 0 auto;
@@ -115,3 +115,73 @@ input[type="number"] {
     input[type="number"]::placeholder {
         color: #aaa;
     }
+
+.like-button {
+    border: none;
+    background-color: transparent;
+    cursor: pointer;
+    font-size: 24px;
+    transition: color 0.3s ease;
+}
+
+.like-button:hover {
+    color: red;
+}
+
+body {
+    background-color: white;
+}
+@media (max-width: 560px) {
+    .container {
+        padding-top: 80px;
+        width: 100%;
+        max-width: 1200px;
+        margin: 0 auto;
+        padding-bottom: 15px;
+    }
+
+    input[type="number"] {
+        max-width:60%;
+        padding: 4px;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        outline: none;
+        transition: border-color 0.2s ease;
+        font-size: 10px;
+    }
+
+        input[type="number"]:focus {
+            border-color: #03d3fc;
+        }
+
+        input[type="number"]::placeholder {
+            color: #aaa;
+        }
+
+
+    label {
+        font-size: 10px;
+    }
+    .AllButton {
+        font-size: 10px;
+        background-color: #05a2eb;
+        color: black;
+        border: none;
+        border-radius: 10px;
+        padding: 3px 5px 3px 5px;
+        transition: padding 0.2s, background-color 0.2s ease-in-out;
+    }
+
+    .pagination a {
+        margin: 0 5px;
+        padding: 5px 5px;
+        border: 1px solid #ccc;
+        border-radius: 3px;
+        color: #333;
+        text-decoration: none;
+        cursor: pointer;
+        background-color: #1fbcff;
+        transition: background-color 0.2s ease;
+        
+    }
+}

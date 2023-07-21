@@ -18,6 +18,7 @@ const Coins = () => {
                 const pageSize = 3;
                 setTotalPages(Math.ceil(totalCount / pageSize));
                 const response = await axios.get(`/coin/GetPaginatedCoins?PageNumber=1&PageSize=${pageSize}`);
+                
                 setCoins(response.data);
                 setLoading(false);
             } catch (err) {
@@ -63,15 +64,14 @@ const Coins = () => {
     const renderCoins = () => {
 
         return (
-            <div>
+            <>
                 <div className={`overlay ${loadingCoins ? 'visible' : ''}`}>
                     <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>
                         <ThreeDots color="#00BFFF" height={80} width={80} />
                     </div>
                 </div>
                 <div className="RightSide">
-                    <div><h3>Available coins:</h3></div>
-                    <div className="AllCoins">                        
+                    <div><h3>Available coins</h3></div>                                        
                         {coins.map((coin) => (
                             <div key={coin.id}>
                                 {coin.name} - ${coin.price}
@@ -103,10 +103,9 @@ const Coins = () => {
                             activeClassName={"active"}
                             nextLinkClassName={"disable"}
                                 previousClassName={"disable"}
-                            />
-                    </div>
-                </div>               
-            </div>
+                        />
+                </div>                             
+            </>
         );
     };
 
@@ -123,14 +122,9 @@ const Coins = () => {
     let coinsElement = loading ? <></> : renderCoins();
 
     return (
-        <>
-        { loading ? <div style = {{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' } }> <ThreeDots color="#00BFFF" height={80} width={80}/></div >
-        : 
         <div>
-                    {coinsElement}
+            {coinsElement}
         </div>
-    }
-        </>
     );
 };
 

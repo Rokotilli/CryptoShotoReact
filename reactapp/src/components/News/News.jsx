@@ -43,7 +43,12 @@ const News = () => {
         renderNews(news)
     );
 
-    return <div>{contents}</div>;
+    return (
+        <div>
+            <h1>News:</h1>
+            {contents}
+        </div>
+    );
 };
 
 export default News;

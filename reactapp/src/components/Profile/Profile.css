@@ -1,6 +1,7 @@
 .firstcomponent {
     display: flex;
     align-items: center;
+    margin-bottom:20px;
 }
 
 .avatar {
@@ -34,7 +35,6 @@
 }
 
 .edit-button:hover {
-
     padding: 5px 15px;
 }
 
@@ -51,5 +51,27 @@
     justify-content:space-between;
     max-width:150px;
     max-height:20px;
+    margin-bottom:25px;
+}
+.ProfileInfo{
+    display:flex;
+    margin-left: 20px;
+    flex-direction: column;
 }
 
+
+
+@media (max-width: 330px) {
+    .avatar {
+        width: 80px;
+        height: 80px;
+        border-radius: 50%;
+        transition: filter 1s ease;
+    }
+    .firstcomponent {
+        display: flex;
+        align-items: center;
+        margin-bottom: 20px;
+        font-size: 70%;
+    }
+}

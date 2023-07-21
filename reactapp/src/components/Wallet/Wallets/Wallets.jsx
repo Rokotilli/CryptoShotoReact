@@ -81,8 +81,8 @@ const Wallets = () => {
 
         if (wallets.length === 0) {
             return (
-                <div>
-                    <h3>Your coins:</h3>
+                <div className="LeftSide">
+                    <h3>Your coins</h3>
                     <div>Empty</div>
                 </div>
             );
@@ -96,7 +96,7 @@ const Wallets = () => {
                     </div>
                 </div>
                 <div className="LeftSide">
-                    <div><h3>Your coins:</h3></div>
+                    <div><h3>Your coins</h3></div>
                     <div className="YourCoins">
                         {wallets.map((wallet) => (
                             <div key={wallet.coinId}>
@@ -126,7 +126,7 @@ const Wallets = () => {
                             marginPagesDisplayed={1}
                             pageRangeDisplayed={3}
                             onPageChange={handlePageChange}
-                            activeClassName={"active" }
+                            activeClassName={"active"}
                             nextLinkClassName={"disable"}
                             previousClassName={"disable"}
                         />

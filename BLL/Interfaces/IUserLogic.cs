@@ -18,5 +18,9 @@ namespace BLL.Interfaces
         Task<bool> ChangeName(string accesstoken, string name);
         Task<bool> ChangePassword(string token, string oldPassword, string newPassword);
         Task<bool> ChangeAvatar(string xAuthAccessToken, byte[] byteavatar);
+        Task<User> GetUserById(string id);
+        Task<bool> IsSubscribed(string xAuthAccessToken, string userid);
+        Task<bool> Follow(string xAuthAccessToken, string userid);
+        Task<int> GetCountFollowers(string userid);
     }
 }
